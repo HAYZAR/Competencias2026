@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Competencias de Física · I.E.D. Los Rosales</title>
+<link rel="stylesheet" href="./modernist.css">
+<script src="./config.js"></script>
+<script src="./estudiantes.js"></script>
+<style>body{margin:0;background:#f3f2f2} a{color:#ec3013} a:hover{color:#ae1800}</style>
+</helmet>
+<div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)">
+  <header style="border-bottom:2px solid var(--color-divider)">
+    <div style="max-width:1120px;margin:0 auto;padding:28px 24px 22px;display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between">
+      <div>
+        <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--color-accent-700);margin-bottom:8px">I.E.D. Los Rosales · Física 10° y 11°</div>
+        <h1 style="margin:0;font-size:clamp(32px,5.5vw,56px);line-height:1">Competencias de Física</h1>
+      </div>
+      <div style="font-size:13px;line-height:1.4">Miércoles 28 de octubre de 2026<br>Equipos de máximo 3 · preferiblemente en parejas</div>
+    </div>
+  </header>
+
+  <nav style="border-bottom:2px solid var(--color-divider)">
+    <div style="max-width:1120px;margin:0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr))">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+        <button onClick="{{ t.on }}" style="all:unset;cursor:pointer;display:flex;gap:10px;align-items:baseline;padding:14px 24px;border-right:2px solid var(--color-divider);background:{{ t.bg }};color:{{ t.fg }}">
+          <span style="font-size:12px;font-weight:600">{{ t.n }}</span>
+          <span style="font-weight:800;font-size:15px">{{ t.l }}</span>
+        </button>
+      </sc-for>
+    </div>
+  </nav>
+
+  <sc-if value="{{ modoDemo }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:2px solid var(--color-divider);background:var(--color-accent-100);color:var(--color-accent-800)">
+      <div style="max-width:1120px;margin:0 auto;padding:10px 24px;font-size:13px">Modo demostración: los datos se guardan solo en este navegador. Para usar la hoja de Drive, pega la URL de Apps Script en <strong>config.js</strong>.</div>
+    </div>
+  </sc-if>
+  <sc-if value="{{ errorCarga }}" hint-placeholder-val="{{ false }}">
+    <div style="border-bottom:2px solid var(--color-divider);background:var(--color-accent-100);color:var(--color-accent-800)">
+      <div style="max-width:1120px;margin:0 auto;padding:10px 24px;font-size:13px">{{ errorCarga }}</div>
+    </div>
+  </sc-if>
+
+  <main style="max-width:1120px;margin:0 auto;padding:0 24px 64px">
+
+    <sc-if value="{{ enInscribir }}" hint-placeholder-val="{{ true }}">
+      <section>
+        <div style="display:flex;gap:16px;align-items:baseline;padding:28px 0 14px;border-bottom:2px solid var(--color-divider)">
+          <span style="font-size:13px;font-weight:800;color:var(--color-accent-700)">01</span>
+          <h2 style="margin:0;font-size:24px">Elige la competencia</h2>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));border-left:2px solid var(--color-divider);border-bottom:2px solid var(--color-divider)">
+          <button onClick="{{ cardCohete.on }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;gap:14px;padding:24px;border-right:2px solid var(--color-divider);background:{{ cardCohete.bg }};color:{{ cardCohete.fg }}">
+            <span style="display:flex;align-items:center;justify-content:flex-start;height:200px;padding:24px;background:#fff;border:2px solid var(--color-divider)">
+              <img src="./img/cohete.svg" alt="Cohete" style="height:140px;width:auto">
+            </span>
+            <span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:{{ cardCohete.kicker }}">Modalidad 1 · Solo 10° A, B, C</span>
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1.1">Cohetes propulsados por agua y presión</span>
+            <span style="display:grid;gap:4px;font-size:14px;line-height:1.4">
+              <span>· Botella pequeña de 300 ml</span>
+              <span>· 2, 3 o 4 aletas uniformemente espaciadas</span>
+              <span>· Nariz con contrapeso</span>
+              <span>· Cuerpo impermeable (cinta adhesiva)</span>
+            </span>
+            <span style="font-size:13px;padding-top:12px;border-top:1px solid currentColor">Se mide: distancia del punto de lanzamiento a la diana</span>
+          </button>
+          <button onClick="{{ cardCarro.on }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;gap:14px;padding:24px;border-right:2px solid var(--color-divider);background:{{ cardCarro.bg }};color:{{ cardCarro.fg }}">
+            <span class="grayscale" style="display:flex;align-items:center;justify-content:flex-start;height:200px;background:#fff;border:2px solid var(--color-divider);overflow:hidden">
+              <img src="./img/carro.jpg" alt="Carro de trampa de ratón" style="height:100%;width:auto">
+            </span>
+            <span style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:{{ cardCarro.kicker }}">Modalidad 2 · Solo 11° A, B, C</span>
+            <span style="font-family:var(--font-heading);font-weight:800;font-size:28px;line-height:1.1">Carros de trampa de ratón o pesas</span>
+            <span style="display:grid;gap:4px;font-size:14px;line-height:1.4">
+              <span>· Energía elástica (trampa) o potencial gravitacional (pesa)</span>
+              <span>· Funciona sin intervención humana</span>
+              <span>· Se mueve en línea recta</span>
+              <span>· Recorre al menos 50 cm derecho</span>
+            </span>
+            <span style="font-size:13px;padding-top:12px;border-top:1px solid currentColor">Se mide: tiempo hasta la meta (gana el menor)</span>
+          </button>
+        </div>
+
+        <sc-if value="{{ hayComp }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;gap:16px;align-items:baseline;padding:36px 0 14px;border-bottom:2px solid var(--color-divider)">
+            <span style="font-size:13px;font-weight:800;color:var(--color-accent-700)">02</span>
+            <h2 style="margin:0;font-size:24px">Arma el equipo · {{ gradoTxt }}</h2>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px 32px;padding:20px 0">
+            <div class="field">
+              <label>Nombre del equipo (opcional)</label>
+              <input class="input" value="{{ nombre }}" onChange="{{ onNombre }}" placeholder="Ej. Los Newtons" maxlength="40">
+            </div>
+            <sc-if value="{{ esCarro }}" hint-placeholder-val="{{ false }}">
+              <div class="field">
+                <label>Tipo de propulsión</label>
+                <div class="seg">
+                  <sc-for list="{{ props }}" as="p" hint-placeholder-count="2">
+                    <label class="seg-opt"><input type="radio" name="propulsion" checked="{{ p.sel }}" onChange="{{ p.pick }}">{{ p.l }}</label>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;background:var(--color-divider);border:2px solid var(--color-divider)">
+            <sc-for list="{{ slots }}" as="s" hint-placeholder-count="2">
+              <div style="display:flex;flex-direction:column;gap:14px;padding:18px;background:var(--color-surface)">
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+                  <span style="font-weight:800;font-size:15px">Integrante {{ s.num }}{{ s.opcionalTxt }}</span>
+                  <sc-if value="{{ s.quitable }}" hint-placeholder-val="{{ false }}">
+                    <button class="btn btn-ghost" onClick="{{ s.quitar }}">Quitar</button>
+                  </sc-if>
+                </div>
+                <div class="field">
+                  <label>Grupo</label>
+                  <div class="seg" style="background:var(--color-bg)">
+                    <sc-for list="{{ s.grupos }}" as="g" hint-placeholder-count="3">
+                      <label class="seg-opt" style="min-width:56px"><input type="radio" name="grupo-{{ s.num }}" checked="{{ g.sel }}" onChange="{{ g.pick }}">{{ g.l }}</label>
+                    </sc-for>
+                  </div>
+                </div>
+                <div class="field">
+                  <label>Estudiante</label>
+                  <select class="input" value="{{ s.valor }}" onChange="{{ s.onSel }}" disabled="{{ s.sinGrupo }}" style="background:var(--color-bg)">
+                    <option value="">{{ s.placeholder }}</option>
+                    <sc-for list="{{ s.opciones }}" as="o" hint-placeholder-count="0">
+                      <option value="{{ o.v }}">{{ o.l }}</option>
+                    </sc-for>
+                  </select>
+                </div>
+              </div>
+            </sc-for>
+            <sc-if value="{{ puedeAgregar }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ agregar }}" style="all:unset;cursor:pointer;display:flex;flex-direction:column;justify-content:center;gap:6px;padding:18px;background:var(--color-bg);min-height:120px" style-hover="background:var(--color-neutral-200)">
+                <span style="font-weight:800;font-size:15px">+ Agregar tercer integrante</span>
+                <span style="font-size:13px;color:var(--color-neutral-700)">Máximo 3 por equipo</span>
+              </button>
+            </sc-if>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;padding:24px 0">
+            <button class="btn btn-primary" onClick="{{ enviar }}" disabled="{{ noEnviable }}" style="font-size:16px;padding:14px 28px;min-width:240px;justify-content:flex-start">{{ enviarTxt }}</button>
+            <span style="font-size:13px;color:var(--color-neutral-700)">{{ ayudaEnvio }}</span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ msg }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top:24px;padding:16px 18px;border:2px solid {{ msgBorde }};background:{{ msgFondo }};font-size:14px">{{ msg }}</div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ enInscritos }}" hint-placeholder-val="{{ false }}">
+      <section>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;padding:28px 0 14px;border-bottom:2px solid var(--color-divider)">
+          <div>
+            <h2 style="margin:0 0 4px;font-size:24px">Equipos inscritos</h2>
+            <div style="font-size:13px;color:var(--color-neutral-700)">{{ resumen }}</div>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+            <div class="seg">
+              <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="3">
+                <label class="seg-opt"><input type="radio" name="filtro" checked="{{ f.sel }}" onChange="{{ f.pick }}">{{ f.l }}</label>
+              </sc-for>
+            </div>
+            <div class="seg">
+              <sc-for list="{{ ordenes }}" as="o" hint-placeholder-count="2">
+                <label class="seg-opt"><input type="radio" name="orden" checked="{{ o.sel }}" onChange="{{ o.pick }}">{{ o.l }}</label>
+              </sc-for>
+            </div>
+            <button class="btn btn-secondary" onClick="{{ recargar }}">Actualizar</button>
+          </div>
+        </div>
+        <div style="overflow-x:auto">
+          <table class="table" style="min-width:760px">
+            <thead>
+              <tr><th style="width:40px">#</th><th>Equipo</th><th>Integrantes</th><th>Competencia</th><th>Marca</th><th style="width:90px">Nota</th></tr>
+            </thead>
+            <tbody>
+              <sc-for list="{{ filas }}" as="r" hint-placeholder-count="0">
+                <tr>
+                  <td style="font-weight:800;vertical-align:top">{{ r.pos }}</td>
+                  <td style="vertical-align:top;font-weight:600">{{ r.nombre }}</td>
+                  <td style="vertical-align:top">
+                    <div style="display:grid;gap:2px">
+                      <sc-for list="{{ r.integrantes }}" as="i" hint-placeholder-count="2">
+                        <span>{{ i.nombre }} <span style="color:var(--color-neutral-700)">· {{ i.grupo }}</span></span>
+                      </sc-for>
+                    </div>
+                  </td>
+                  <td style="vertical-align:top">{{ r.comp }}</td>
+                  <td style="vertical-align:top">{{ r.marca }}</td>
+                  <td style="vertical-align:top"><span class="tag {{ r.tagClase }}" style="font-weight:800;font-size:13px">{{ r.nota }}</span></td>
+                </tr>
+              </sc-for>
+            </tbody>
+          </table>
+        </div>
+        <sc-if value="{{ sinFilas }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:32px 0;font-size:15px;color:var(--color-neutral-700)">{{ vacioTxt }}</div>
+        </sc-if>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{ enCalificar }}" hint-placeholder-val="{{ false }}">
+      <section>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between;padding:28px 0 14px;border-bottom:2px solid var(--color-divider)">
+          <div>
+            <h2 style="margin:0 0 4px;font-size:24px">Calificación del dispositivo</h2>
+            <div style="font-size:13px;color:var(--color-neutral-700)">Nota de 0.0 a 5.0 calculada por la lista de condiciones mínimas y funcionamiento básico</div>
+          </div>
+          <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+            <button class="btn btn-secondary" onClick="{{ salir }}">Cerrar sesión docente</button>
+          </sc-if>
+        </div>
+
+        <sc-if value="{{ noAuth }}" hint-placeholder-val="{{ true }}">
+          <div style="max-width:420px;padding:28px 0;display:flex;flex-direction:column;gap:14px">
+            <div class="field">
+              <label>Clave del docente</label>
+              <input class="input" type="password" value="{{ clave }}" onChange="{{ onClave }}" onKeyDown="{{ onClaveKey }}" placeholder="••••••••">
+            </div>
+            <button class="btn btn-primary" onClick="{{ entrar }}" style="justify-content:flex-start;padding:12px 20px">Entrar</button>
+            <sc-if value="{{ authErr }}" hint-placeholder-val="{{ false }}">
+              <span style="font-size:13px;color:var(--color-accent-700)">{{ authErr }}</span>
+            </sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ auth }}" hint-placeholder-val="{{ false }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:0 40px;padding-top:20px">
+            <div>
+              <div class="seg" style="margin-bottom:12px">
+                <sc-for list="{{ filtrosCal }}" as="f" hint-placeholder-count="2">
+                  <label class="seg-opt"><input type="radio" name="filtroCal" checked="{{ f.sel }}" onChange="{{ f.pick }}">{{ f.l }}</label>
+                </sc-for>
+              </div>
+              <div style="border-top:2px solid var(--color-divider)">
+                <sc-for list="{{ listaCal }}" as="e" hint-placeholder-count="0">
+                  <button onClick="{{ e.on }}" style="all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center;padding:12px 12px;border-bottom:1px solid var(--color-divider);background:{{ e.bg }};color:{{ e.fg }}">
+                    <span style="display:grid;gap:2px;min-width:0">
+                      <span style="font-weight:800;font-size:15px">{{ e.titulo }}</span>
+                      <span style="font-size:12px;opacity:0.8">{{ e.miembros }}</span>
+                    </span>
+                    <span style="font-weight:800;font-size:18px">{{ e.nota }}</span>
+                  </button>
+                </sc-for>
+                <sc-if value="{{ listaVacia }}" hint-placeholder-val="{{ false }}">
+                  <div style="padding:20px 0;font-size:14px;color:var(--color-neutral-700)">No hay equipos inscritos en esta competencia.</div>
+                </sc-if>
+              </div>
+            </div>
+
+            <div>
+              <sc-if value="{{ sinSel }}" hint-placeholder-val="{{ true }}">
+                <div style="padding:24px 0;font-size:15px;color:var(--color-neutral-700)">Selecciona un equipo de la lista para calificarlo.</div>
+              </sc-if>
+              <sc-if value="{{ haySel }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:18px;padding-bottom:24px">
+                  <div>
+                    <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;color:var(--color-accent-700);margin-bottom:6px">{{ sel.kicker }}</div>
+                    <h3 style="margin:0 0 6px">{{ sel.titulo }}</h3>
+                    <div style="font-size:14px">{{ sel.miembros }}</div>
+                  </div>
+                  <div style="border-top:2px solid var(--color-divider)">
+                    <sc-for list="{{ criterios }}" as="c" hint-placeholder-count="5">
+                      <button onClick="{{ c.toggle }}" style="all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 4px;border-bottom:1px solid var(--color-divider)" style-hover="background:var(--color-neutral-200)">
+                        <span style="width:22px;height:22px;border:2px solid var(--color-text);display:grid;place-items:center;color:var(--color-bg);font-weight:800;font-size:14px;background:{{ c.fill }}">{{ c.marca }}</span>
+                        <span style="font-size:15px;line-height:1.35">{{ c.t }}</span>
+                        <span style="font-size:13px;font-weight:600;color:var(--color-neutral-700)">{{ c.p }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                  <div style="display:grid;grid-template-columns:auto minmax(0,1fr);gap:24px;align-items:end;padding:18px;background:var(--color-text);color:var(--color-bg)">
+                    <div style="font-family:var(--font-heading);font-weight:800;font-size:72px;line-height:0.9">{{ notaActual }}</div>
+                    <div style="font-size:13px;line-height:1.4">
+                      <div style="font-weight:800;font-size:15px;margin-bottom:2px">{{ estadoNota }}</div>
+                      <div>{{ cumplidosTxt }}</div>
+                    </div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+                    <div class="field">
+                      <label>{{ medidaLabel }}</label>
+                      <input class="input" type="number" step="0.01" min="0" value="{{ medida }}" onChange="{{ onMedida }}" placeholder="Opcional">
+                    </div>
+                    <div class="field">
+                      <label>Observaciones</label>
+                      <input class="input" value="{{ obs }}" onChange="{{ onObs }}" placeholder="Opcional">
+                    </div>
+                  </div>
+                  <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between">
+                    <button class="btn btn-primary" onClick="{{ guardar }}" disabled="{{ guardando }}" style="font-size:16px;padding:14px 28px;min-width:220px;justify-content:flex-start">{{ guardarTxt }}</button>
+                    <button class="btn btn-ghost" onClick="{{ eliminar }}">Eliminar equipo</button>
+                  </div>
+                  <sc-if value="{{ msgCal }}" hint-placeholder-val="{{ false }}">
+                    <div style="font-size:14px;font-weight:600;color:var(--color-accent-700)">{{ msgCal }}</div>
+                  </sc-if>
+                </div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-if>
+      </section>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const CLAVE_LOCAL = 'fisica2026';
+const LS = 'fisica-competencias-equipos-v1';
+const COMP = {
+  cohete: { grado: '10', corto: 'Cohete de agua', medida: 'Distancia a la diana (m)', unidad: 'm' },
+  carro: { grado: '11', corto: 'Carro', medida: 'Tiempo a la meta (s)', unidad: 's' }
+};
+const CRIT = {
+  cohete: [
+    { k: 'botella', t: 'Botella pequeña de 300 ml', p: 0.75 },
+    { k: 'aletas', t: '2, 3 o 4 aletas uniformemente espaciadas', p: 0.75 },
+    { k: 'nariz', t: 'Nariz con contrapeso', p: 0.75 },
+    { k: 'impermeable', t: 'Cuerpo impermeable (cinta adhesiva)', p: 0.75 },
+    { k: 'lanza', t: 'Sale disparado con la presión y el agua suministradas', p: 2.0 }
+  ],
+  carro: [
+    { k: 'propulsion', t: 'Propulsión funcional (trampa de ratón o contrapeso)', p: 1.0 },
+    { k: 'autonomo', t: 'Se mueve sin intervención humana', p: 1.0 },
+    { k: 'recto', t: 'Avanza en línea recta', p: 1.0 },
+    { k: 'distancia', t: 'Recorre al menos 50 cm derecho', p: 2.0 }
+  ]
+};
+const PROPS = { trampa: 'Trampa de ratón', pesa: 'Pesa' };
+const tc = s => String(s || '').toLowerCase().replace(/(^|\s)(\S)/g, (m, a, b) => a + b.toUpperCase());
+const grupoTxt = g => String(g).replace(/^(\d+)/, '$1°');
+const calcNota = (comp, ck) => CRIT[comp].reduce((s, c) => s + (ck && ck[c.k] ? c.p : 0), 0);
+const apiUrl = () => (window.APPS_SCRIPT_URL || '').trim();
+
+function localPost(d) {
+  const eqs = JSON.parse(localStorage.getItem(LS) || '[]');
+  const save = () => localStorage.setItem(LS, JSON.stringify(eqs));
+  if (d.accion === 'inscribir') {
+    const e = d.equipo, tomados = new Set();
+    eqs.forEach(x => x.integrantes.forEach(i => tomados.add(i.grupo + '|' + i.nombre)));
+    const dup = e.integrantes.find(i => tomados.has(i.grupo + '|' + i.nombre));
+    if (dup) throw new Error(tc(dup.nombre) + ' ya está inscrito en otro equipo.');
+    Object.assign(e, { id: 'E' + Date.now().toString(36).toUpperCase(), fecha: new Date().toISOString(), grado: COMP[e.competencia].grado, checklist: null, nota: null, medida: null, obs: '' });
+    eqs.push(e); save(); return { ok: true };
+  }
+  if (d.clave !== CLAVE_LOCAL) throw new Error('Clave incorrecta');
+  if (d.accion === 'verificar') return { ok: true };
+  const i = eqs.findIndex(x => x.id === d.id);
+  if (i < 0) throw new Error('Equipo no encontrado');
+  if (d.accion === 'calificar') Object.assign(eqs[i], { checklist: d.checklist, nota: d.nota, medida: d.medida, obs: d.obs });
+  if (d.accion === 'eliminar') eqs.splice(i, 1);
+  save(); return { ok: true };
+}
+async function listar() {
+  if (!apiUrl()) return JSON.parse(localStorage.getItem(LS) || '[]');
+  const j = await (await fetch(apiUrl())).json();
+  if (!j.ok) throw new Error(j.error || 'Error');
+  return j.equipos;
+}
+async function post(d) {
+  if (!apiUrl()) return localPost(d);
+  const j = await (await fetch(apiUrl(), { method: 'POST', body: JSON.stringify(d) })).json();
+  if (!j.ok) throw new Error(j.error || 'Error');
+  return j;
+}
+const emptySlots = () => [{ g: '', n: '' }, { g: '', n: '' }, { g: '', n: '' }];
+
+class Component extends DCLogic {
+  state = {
+    tab: 'inscribir', equipos: [], errorCarga: '',
+    comp: null, nombre: '', prop: '', slots: emptySlots(), nSlots: 2, enviando: false, msg: '', msgOk: true,
+    filtro: 'todos', orden: 'inscripcion',
+    clave: '', auth: false, authErr: '', filtroCal: 'cohete', selId: null, ck: {}, medida: '', obs: '', guardando: false, msgCal: ''
+  };
+  componentDidMount() {
+    this.load();
+    this.timer = setInterval(() => { if (!this.state.enviando && !this.state.guardando) this.load(); }, 15000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+  load = async () => {
+    try { this.setState({ equipos: await listar(), errorCarga: '' }); }
+    catch (e) { this.setState({ errorCarga: 'No se pudo conectar con la hoja de Drive: ' + e.message }); }
+  };
+  setSlot(i, patch) {
+    this.setState(s => ({ slots: s.slots.map((x, j) => j === i ? { ...x, ...patch } : x), msg: '' }));
+  }
+  pickComp(c) {
+    if (this.state.comp === c) return;
+    this.setState({ comp: c, slots: emptySlots(), nSlots: 2, prop: '', msg: '' });
+  }
+  enviar = async () => {
+    const { comp, nombre, prop, slots, nSlots } = this.state;
+    const ints = slots.slice(0, nSlots).filter(s => s.n).map(s => ({ nombre: s.n, grupo: COMP[comp].grado + s.g }));
+    this.setState({ enviando: true, msg: '' });
+    try {
+      await post({ accion: 'inscribir', equipo: { competencia: comp, nombre: nombre.trim(), propulsion: comp === 'carro' ? prop : '', integrantes: ints } });
+      const quien = ints.map(i => tc(i.nombre)).join(', ');
+      this.setState({ enviando: false, msgOk: true, msg: 'Equipo inscrito en ' + (comp === 'cohete' ? 'Cohetes (10°)' : 'Carros (11°)') + ': ' + quien + '.', comp: null, nombre: '', prop: '', slots: emptySlots(), nSlots: 2 });
+      this.load();
+    } catch (e) {
+      this.setState({ enviando: false, msgOk: false, msg: e.message });
+      this.load();
+    }
+  };
+  entrar = async () => {
+    try { await post({ accion: 'verificar', clave: this.state.clave }); this.setState({ auth: true, authErr: '' }); }
+    catch (e) { this.setState({ authErr: e.message }); }
+  };
+  selEquipo(e) {
+    this.setState({ selId: e.id, ck: e.checklist || {}, medida: e.medida == null ? '' : String(e.medida), obs: e.obs || '', msgCal: '' });
+  }
+  guardar = async () => {
+    const { selId, ck, medida, obs, clave, equipos } = this.state;
+    const eq = equipos.find(x => x.id === selId); if (!eq) return;
+    const nota = Math.round(calcNota(eq.competencia, ck) * 10) / 10;
+    const med = medida === '' ? null : Number(medida);
+    this.setState({ guardando: true, msgCal: '' });
+    try {
+      await post({ accion: 'calificar', clave, id: selId, checklist: ck, nota, medida: med, obs });
+      this.setState(s => ({ guardando: false, msgCal: 'Nota guardada: ' + nota.toFixed(1), equipos: s.equipos.map(x => x.id === selId ? { ...x, checklist: ck, nota, medida: med, obs } : x) }));
+    } catch (e) { this.setState({ guardando: false, msgCal: e.message }); }
+  };
+  eliminar = async () => {
+    const { selId, clave } = this.state;
+    if (!window.confirm('¿Eliminar este equipo? Sus integrantes quedarán libres para inscribirse de nuevo.')) return;
+    try { await post({ accion: 'eliminar', clave, id: selId }); this.setState({ selId: null }); this.load(); }
+    catch (e) { this.setState({ msgCal: e.message }); }
+  };
+  equipoTitulo(e, idx) { return e.nombre ? e.nombre : 'Equipo ' + (idx + 1); }
+
+  renderVals() {
+    const S = this.state;
+    const ink = 'var(--color-text)', bg = 'var(--color-bg)';
+    const EST = window.ESTUDIANTES || {};
+    const tabs = [['inscribir', 'Inscripción', '01'], ['inscritos', 'Equipos inscritos', '02'], ['calificar', 'Calificación', '03']].map(([id, l, n]) => ({
+      l, n, on: () => this.setState({ tab: id, msg: '' }),
+      bg: S.tab === id ? 'var(--color-accent)' : 'transparent', fg: S.tab === id ? '#fff' : ink
+    }));
+    const card = c => ({ on: () => this.pickComp(c), bg: S.comp === c ? ink : 'var(--color-surface)', fg: S.comp === c ? bg : ink, kicker: S.comp === c ? 'var(--color-accent-400)' : 'var(--color-accent-700)' });
+    const ordenIdx = {}; ['cohete', 'carro'].forEach(c => S.equipos.filter(e => e.competencia === c).forEach((e, i) => ordenIdx[e.id] = i));
+
+    // Inscripción
+    const grado = S.comp ? COMP[S.comp].grado : '';
+    const tomados = new Set();
+    S.equipos.forEach(e => e.integrantes.forEach(i => tomados.add(i.grupo + '|' + i.nombre)));
+    const activos = S.slots.slice(0, S.nSlots);
+    const slots = activos.map((s, i) => {
+      const otros = new Set(activos.filter((x, j) => j !== i && x.n).map(x => x.g + '|' + x.n));
+      const lista = s.g ? (EST[grado + s.g] || []).filter(n => !tomados.has(grado + s.g + '|' + n) && !otros.has(s.g + '|' + n)) : [];
+      return {
+        num: i + 1, opcionalTxt: i > 0 ? ' · opcional' : '', quitable: i === 2,
+        quitar: () => this.setState(st => ({ nSlots: 2, slots: st.slots.map((x, j) => j === 2 ? { g: '', n: '' } : x) })),
+        grupos: ['A', 'B', 'C'].map(L => ({ l: grado + '°' + L, sel: s.g === L, pick: () => this.setSlot(i, { g: L, n: '' }) })),
+        sinGrupo: !s.g, valor: s.n,
+        placeholder: !s.g ? 'Primero elige el grupo' : lista.length ? 'Selecciona (' + lista.length + ' disponibles)' : 'No quedan estudiantes disponibles',
+        opciones: lista.map(n => ({ v: n, l: tc(n) })),
+        onSel: e => this.setSlot(i, { n: e.target.value })
+      };
+    });
+    const llenos = activos.filter(s => s.n).length;
+    const incompleto = activos.some(s => s.g && !s.n && activos.indexOf(s) === 0);
+    const faltaProp = S.comp === 'carro' && !S.prop;
+    const noEnviable = S.enviando || !S.comp || llenos === 0 || faltaProp || incompleto;
+    const ayudaEnvio = !llenos ? 'Selecciona al menos un integrante.' : faltaProp ? 'Indica el tipo de propulsión del carro.' : llenos === 1 ? 'Recomendado: inscribirse en pareja.' : llenos + ' integrantes listos.';
+
+    // Inscritos
+    let lista = S.equipos.filter(e => S.filtro === 'todos' || e.competencia === S.filtro);
+    if (S.orden === 'marca') lista = lista.slice().sort((a, b) => (a.medida == null ? 1e9 : a.medida) - (b.medida == null ? 1e9 : b.medida));
+    const filas = lista.map((e, i) => ({
+      pos: i + 1, nombre: this.equipoTitulo(e, ordenIdx[e.id]),
+      integrantes: e.integrantes.map(x => ({ nombre: tc(x.nombre), grupo: grupoTxt(x.grupo) })),
+      comp: e.competencia === 'cohete' ? 'Cohete · 10°' : 'Carro · 11°' + (e.propulsion ? ' · ' + PROPS[e.propulsion] : ''),
+      marca: e.medida == null ? '—' : e.medida + ' ' + COMP[e.competencia].unidad,
+      nota: e.nota == null ? 'Pendiente' : Number(e.nota).toFixed(1),
+      tagClase: e.nota == null ? 'tag-neutral' : e.nota >= 3 ? 'tag-accent' : 'tag-outline'
+    }));
+    const nCo = S.equipos.filter(e => e.competencia === 'cohete').length, nCa = S.equipos.length - nCo;
+    const nEst = S.equipos.reduce((s, e) => s + e.integrantes.length, 0);
+
+    // Calificación
+    const listaCal = S.equipos.filter(e => e.competencia === S.filtroCal).map(e => ({
+      titulo: this.equipoTitulo(e, ordenIdx[e.id]),
+      miembros: e.integrantes.map(x => tc(x.nombre).split(' ').slice(-2).join(' ') + ' (' + grupoTxt(x.grupo) + ')').join(' · '),
+      nota: e.nota == null ? '—' : Number(e.nota).toFixed(1),
+      on: () => this.selEquipo(e),
+      bg: S.selId === e.id ? ink : 'transparent', fg: S.selId === e.id ? bg : ink
+    }));
+    const eq = S.equipos.find(e => e.id === S.selId && e.competencia === S.filtroCal);
+    const crit = eq ? CRIT[eq.competencia] : [];
+    const nota = eq ? calcNota(eq.competencia, S.ck) : 0;
+    const cumplidos = crit.filter(c => S.ck[c.k]).length;
+
+    return {
+      tabs, modoDemo: !apiUrl(), errorCarga: S.errorCarga,
+      enInscribir: S.tab === 'inscribir', enInscritos: S.tab === 'inscritos', enCalificar: S.tab === 'calificar',
+      cardCohete: card('cohete'), cardCarro: card('carro'),
+      hayComp: !!S.comp, esCarro: S.comp === 'carro', gradoTxt: grado + '° A, B o C',
+      nombre: S.nombre, onNombre: e => this.setState({ nombre: e.target.value }),
+      props: Object.entries(PROPS).map(([k, l]) => ({ l, sel: S.prop === k, pick: () => this.setState({ prop: k }) })),
+      slots, puedeAgregar: S.nSlots < 3, agregar: () => this.setState({ nSlots: 3 }),
+      enviar: this.enviar, noEnviable, enviarTxt: S.enviando ? 'Inscribiendo…' : 'Inscribir equipo', ayudaEnvio,
+      msg: S.msg, msgBorde: S.msgOk ? ink : 'var(--color-accent)', msgFondo: S.msgOk ? 'var(--color-surface)' : 'var(--color-accent-100)',
+
+      resumen: S.equipos.length + ' equipos · ' + nEst + ' estudiantes · ' + nCo + ' cohetes · ' + nCa + ' carros · se actualiza cada 15 s',
+      filtros: [['todos', 'Todos'], ['cohete', 'Cohetes 10°'], ['carro', 'Carros 11°']].map(([k, l]) => ({ l, sel: S.filtro === k, pick: () => this.setState({ filtro: k }) })),
+      ordenes: [['inscripcion', 'Por inscripción'], ['marca', 'Mejor marca']].map(([k, l]) => ({ l, sel: S.orden === k, pick: () => this.setState({ orden: k }) })),
+      recargar: this.load, filas, sinFilas: filas.length === 0, vacioTxt: 'Aún no hay equipos inscritos' + (S.filtro === 'todos' ? '.' : ' en esta competencia.'),
+
+      auth: S.auth, noAuth: !S.auth, clave: S.clave, authErr: S.authErr,
+      onClave: e => this.setState({ clave: e.target.value, authErr: '' }),
+      onClaveKey: e => { if (e.key === 'Enter') this.entrar(); },
+      entrar: this.entrar, salir: () => this.setState({ auth: false, clave: '', selId: null }),
+      filtrosCal: [['cohete', 'Cohetes 10°'], ['carro', 'Carros 11°']].map(([k, l]) => ({ l, sel: S.filtroCal === k, pick: () => this.setState({ filtroCal: k, selId: null }) })),
+      listaCal, listaVacia: listaCal.length === 0, sinSel: !eq, haySel: !!eq,
+      sel: eq ? {
+        kicker: eq.competencia === 'cohete' ? 'Cohete de agua · 10°' : 'Carro · 11°' + (eq.propulsion ? ' · ' + PROPS[eq.propulsion] : ''),
+        titulo: this.equipoTitulo(eq, ordenIdx[eq.id]),
+        miembros: eq.integrantes.map(x => tc(x.nombre) + ' (' + grupoTxt(x.grupo) + ')').join(' · ')
+      } : {},
+      criterios: crit.map(c => ({
+        t: c.t, p: '+' + c.p.toFixed(2), marca: S.ck[c.k] ? '✓' : '',
+        fill: S.ck[c.k] ? 'var(--color-accent)' : 'transparent',
+        toggle: () => this.setState(st => ({ ck: { ...st.ck, [c.k]: !st.ck[c.k] }, msgCal: '' }))
+      })),
+      notaActual: nota.toFixed(1),
+      estadoNota: cumplidos === crit.length && crit.length ? 'Cumple todas las condiciones' : nota >= 3 ? 'Cumple parcialmente' : 'No cumple las condiciones mínimas',
+      cumplidosTxt: cumplidos + ' de ' + crit.length + ' condiciones · el funcionamiento vale 2.0',
+      medidaLabel: eq ? COMP[eq.competencia].medida : '', medida: S.medida, onMedida: e => this.setState({ medida: e.target.value }),
+      obs: S.obs, onObs: e => this.setState({ obs: e.target.value }),
+      guardar: this.guardar, guardando: S.guardando, guardarTxt: S.guardando ? 'Guardando…' : 'Guardar nota', eliminar: this.eliminar, msgCal: S.msgCal
+    };
+  }
+}
+</script>
+</body>
+</html>
